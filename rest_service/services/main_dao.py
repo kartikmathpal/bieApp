@@ -1,35 +1,22 @@
 import sys
-import re
-import pymongo
-from   pymongo import MongoClient
+import ABINITIO_dao
+import BIE_dao
 
-#Establish Connection
-connection = MongoClient('localhost',27017) #Connect to MongoClient
-db         = connection.test                #Connect to Database
-handle     = db.bie                         #Connect to Collection
+#collections
+COLLECTIONS = {
+    'BIE': 'BIE',
+    'ABINITIO': 'ABINITIO'
+}
 
-#Define a search function
-def searchByKey(key):
-    items    = list(handle.find({"$or":[{"FINAL_TBL":{'$regex':key,'$options':'i'}},{"DRIVING_TBL":{'$regex':key}},{"AGG_TBL":{'$regex':key}},{"SOURCE":{'$regex':key}},{"JOB":{'$regex':key}},
-                           {"APPLN":{'$regex':key}},{"DESCRIPTION":{'$regex':key}}]}))
-    # items    = list(handle.find({"$or":[{"FINAL_TBL":{"regex":key}},{"DRIVING_TBL":{"regex":key}},{"AGG_TBL":{"regex":key}},{"SOURCE":{"regex":key}},
-    # {"JOB":{"regex":key}},{"APPLN":{"regex":key}},{"DESCRIPTION":{"regex":key}}]}))
-    #find Operation returns a Cursor which is a pointer to the result set of the find operation.
-    response = []
-    for item in items:
-        post = {
-        "FINAL_TBL"   : item["FINAL_TBL"],
-        "DRIVING_TBL" : item["DRIVING_TBL"],
-        "AGG_TBL"     : item["AGG_TBL"],
-        "SOURCE"      : item["SOURCE"],
-        "JOB"         : item["JOB"],
-        "APPLN"       : item["APPLN"],
-        "DESCRIPTION" : item["DESCRIPTION"],
+def searchByKey(key, collection):
 
-        }
-        response.append(post)
-    print  response
-    return response
+    if collection == COLLECTIONS['BIE']:
+        return BIE_dao.searchByKey(key)
+    elif collection == COLLECTIONS['ABINITIO']:
+        return ABINITIO_dao.searchByKey(key)
+    else:
+        raise Exception("Collection Does Not Exist.")
+    
 
 
 ################################################################################

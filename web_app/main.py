@@ -1,10 +1,11 @@
-from bottle import Bottle, template, static_file
+from bottle import Bottle, template, static_file, request
 
 app = Bottle()
 
 @app.route('/')
 def index():
   # return template('main', {})
+  # print(request.query["domain"])
   return static_file('main.html', root='./')
 
 @app.route('/static/<filepath:path>')
