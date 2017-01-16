@@ -6,7 +6,9 @@ app = Bottle()
 def index():
   # return template('main', {})
   # print(request.query["domain"])
-  return static_file('main.html', root='./')
+  return static_file('main.html', root='./') #------check try using render with empty object
+  # return "<h1>hello<h1>"
+  # fs.open('main', 'r', ut-8')
 
 @app.route('/static/<filepath:path>')
 def server_static(filepath):
